@@ -72,10 +72,25 @@ const Artwork = styled.img`
   width: 150px;
   height: auto;
 `;
+const ArtworkCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+`;
+
+const ArtworkTitleText = styled.p`
+  font-size: 14px;
+  margin-top: 10px;
+  color: #333;
+`;
+
 
 const AtaTribesPage = () => {
   const [tribeName, setTribeName] = useState("");
   const [backgroundImage, setBackgroundImage] = useState("");
+  const [description, setDescription] = useState("");
+  const [artworks, setArtworks] = useState([]);
 
   useEffect(() => {
     // Retrieve the stored tribe name from local storage
@@ -83,46 +98,73 @@ const AtaTribesPage = () => {
     if (storedTribeName) {
       setTribeName(storedTribeName);
 
-      // Fetch the background image from the API
+      // Fetch the background image and description from the API
       axios
         .post("https://vynceianoani.helioho.st/alampat/getTribeImage.php", { name: storedTribeName })
         .then((response) => {
-          if (response.data && response.data.featured_image) {
-            setBackgroundImage(`data:image/jpeg;base64,${response.data.featured_image}`);
+          if (response.data) {
+            if (response.data.featured_image) {
+              setBackgroundImage(`data:image/jpeg;base64,${response.data.featured_image}`);
+            }
+            if (response.data.description) {
+              setDescription(response.data.description);
+            }
           }
         })
         .catch((error) => {
-          console.error("Error fetching tribe image:", error);
+          console.error("Error fetching tribe data:", error);
+        });
+
+      // Fetch artworks for the tribe
+      axios
+        .post("https://vynceianoani.helioho.st/alampat/getArtworks.php", { tribeName: storedTribeName })
+        .then((response) => {
+          if (Array.isArray(response.data)) {
+            setArtworks(response.data);
+          } else {
+            setArtworks([]); // Set to an empty array if the response is not an array
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching artworks:", error);
+          setArtworks([]); // Set to an empty array in case of an error
         });
     }
   }, []);
 
+  
   return (
     <>
       <HeaderImage
         style={{
-          backgroundImage: `url(${backgroundImage})`, // Dynamically set the background image
+          backgroundImage: `url(${backgroundImage})`,
         }}
       >
-        <Title>{tribeName || "ATA TRIBES"}</Title> {/* Display the stored name or default title */}
+        <Title>{tribeName || "ATA TRIBES"}</Title>
       </HeaderImage>
       <Container>
         <Subheading>BRIEF INTRODUCTION</Subheading>
-        <Paragraph>
-          Diyas is created to promote all kinds of arts created by our indigenous people and protect their rights as the owner of their creation.
-        </Paragraph>
+        <Paragraph>{description || "No description available for this tribe."}</Paragraph>
         <ArtworkSection>
           <ArtworkTitle>{tribeName} ARTWORKS</ArtworkTitle>
           <Artworks>
-            <Artwork src="/path-to-artwork-image.jpg" alt="Artwork 1" />
-            <Artwork src="/path-to-artwork-image.jpg" alt="Artwork 2" />
-            <Artwork src="/path-to-artwork-image.jpg" alt="Artwork 3" />
-            <Artwork src="/path-to-artwork-image.jpg" alt="Artwork 4" />
+            {artworks.length > 0 ? (
+              artworks.map((artwork) => (
+                <ArtworkCard key={artwork.id}>
+                  <Artwork
+                    src={`data:image/jpeg;base64,${artwork.picture}`}
+                    alt={artwork.title}
+                  />
+                  <ArtworkTitleText>{artwork.title}</ArtworkTitleText>
+                </ArtworkCard>
+              ))
+            ) : (
+              <p>No artworks available for this tribe.</p>
+            )}
           </Artworks>
         </ArtworkSection>
       </Container>
     </>
   );
 };
-
 export default AtaTribesPage;

@@ -5,6 +5,7 @@ import AddEventPage from "./Pages/AddEventPage";
 import EventsTable from "./Pages/EventsTable";
 import AddTribes from "./Pages/AddTribes";
 import TribePage from "./Pages/TribePage";
+import AddArtworks from "./Pages/AddArtworks";
 
 const App = () => {
   return (
@@ -15,6 +16,8 @@ const App = () => {
         <Route path="/events" element={<EventsTable />} />
         <Route path="/add-tribes" element={<AddTribes />} />
         <Route path="/tribes" element={<TribePage />} />
+        <Route path="/add-artworks" element={<AddArtworks />} />
+        {/* Add more routes as needed */}
       </Routes>
     </Router>
   );
