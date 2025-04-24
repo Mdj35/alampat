@@ -8,6 +8,11 @@ import {
   CollageImageContainer,
   CollageImage,
   Overlay,
+  ArtworksSection,
+  ArtworksGrid,
+  ArtworkCard,
+  ArtworkImage,
+  ArtworkTitle,
   EventsSection,
   EventsTitle,
   EventsContainer,
@@ -29,16 +34,19 @@ import {
   FooterLogoContainer,
   FooterLogoImage,
   FooterBottom,
-  FollowUsButton
+  FollowUsButton,
+  SeeAllButton
 } from "../Design/Homepage";
 import Navbar from "../Navbar";
-import logo from "../logo2.png"
+import logo from "../logo2.png";
+import axios from "axios";
 import { FaInstagram, FaFacebook } from "react-icons/fa";
 import { ClipLoader } from "react-spinners"; // Import the loading spinner
 
 const HomePage = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true); // State to track loading status
+  const [tribes, setTribes] = useState([]);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -55,9 +63,21 @@ const HomePage = () => {
 
     fetchEvents();
   }, []);
+  useEffect(() => {
+    const fetchTribes = async () => {
+      try {
+        const response = await axios.get("https://vynceianoani.helioho.st/alampat/gettribes.php");
+        setTribes(response.data);
+      } catch (error) {
+        console.error("Error fetching tribes:", error);
+      }
+    };
+
+    fetchTribes();
+  }, []);
 
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
@@ -72,25 +92,27 @@ const HomePage = () => {
           </Description>
         </Hero>
 
-        {/* Image Collage Section */}
-        <CollageSection>
-          <CollageImageContainer>
-            <CollageImage src="https://images.squarespace-cdn.com/content/v1/5ac530cff2e6b1f8c1cee361/1595389766038-RS936KCXGQFD124SHP56/4+Ritual+bowl%2C+Ifugao%2C+QB+IMG-8662.jpg" alt="Handwoven Art 1" />
-            <Overlay />
-          </CollageImageContainer>
-          <CollageImageContainer>
-            <CollageImage src="https://images.squarespace-cdn.com/content/v1/5ac530cff2e6b1f8c1cee361/1595389766038-RS936KCXGQFD124SHP56/4+Ritual+bowl%2C+Ifugao%2C+QB+IMG-8662.jpg" alt="Basket Weaving" />
-            <Overlay />
-          </CollageImageContainer>
-          <CollageImageContainer>
-            <CollageImage src="https://images.squarespace-cdn.com/content/v1/5ac530cff2e6b1f8c1cee361/1595389766038-RS936KCXGQFD124SHP56/4+Ritual+bowl%2C+Ifugao%2C+QB+IMG-8662.jpg" alt="Cultural Handcrafts" />
-            <Overlay />
-          </CollageImageContainer>
-          <CollageImageContainer>
-            <CollageImage src="https://images.squarespace-cdn.com/content/v1/5ac530cff2e6b1f8c1cee361/1595389766038-RS936KCXGQFD124SHP56/4+Ritual+bowl%2C+Ifugao%2C+QB+IMG-8662.jpg" alt="Traditional Jewelry" />
-            <Overlay />
-          </CollageImageContainer>
-        </CollageSection>
+        {/* Tribes/Artworks Section */}
+        
+        <ArtworksSection>
+  <h2>Tribes/Artworks</h2>
+  {loading ? (
+    <ClipLoader size={50} color={"#123abc"} loading={loading} /> // Loading spinner
+  ) : (
+    <ArtworksGrid>
+      {tribes.slice(0, 4).map((tribe) => ( // Limit to the first 4 tribes
+        <ArtworkCard key={tribe.id}>
+          <ArtworkImage
+            src={`data:image/jpeg;base64,${tribe.featured_image}`}
+            alt={tribe.name}
+          />
+          <ArtworkTitle>{tribe.name}</ArtworkTitle>
+        </ArtworkCard>
+      ))}
+    </ArtworksGrid>
+  )}
+  <SeeAllButton>See All Tribes</SeeAllButton>
+</ArtworksSection>
 
         {/* Events Section */}
         <EventsSection>
@@ -115,7 +137,7 @@ const HomePage = () => {
         <FooterSection>
           <FooterContainer>
             <FooterLogoContainer>
-              <FooterLogoImage src={logo} alt="Footer Logo" /> {/* Add your logo image here */}
+              <FooterLogoImage src={logo} alt="Footer Logo" />
             </FooterLogoContainer>
             <div>
               <FooterText>ALAMPAT is created to promote all kinds of arts created by our indigenous people and protect their rights as the owner of their creation.</FooterText>
@@ -128,32 +150,24 @@ const HomePage = () => {
                 <LogoImage src="https://www.hcdc.edu.ph/wp-content/uploads/2018/02/hcdclogo.png" alt="Collaboration Logo 1" />
                 <LogoImage src="https://www.hcdc.edu.ph/wp-content/uploads/2018/02/hcdclogo.png" alt="Collaboration Logo 2" />
               </LogosContainer>
-              </div>
+            </div>
           </FooterContainer>
         </FooterSection>
       </Container>
-              {/* Donate Button */}
-              <FooterBottom>
-  {/* Donate Button */}
-  <DonateButton>Donate</DonateButton>
-
-  {/* Social Media Section */}
-  <SocialMediaContainer>
-    <FollowUsButton>follow us</FollowUsButton>
-    <FaInstagram />
-    <FaFacebook />
-    <span>ms.mwn</span>
-    <span>marwen escobar</span>
-  </SocialMediaContainer>
-
-  {/* Footer Links */}
-  <FooterLinks>
-    <span>Learn more</span>
-    <span>FAQs</span>
-  </FooterLinks>
-</FooterBottom>
-
-          
+      <FooterBottom>
+        <DonateButton>Donate</DonateButton>
+        <SocialMediaContainer>
+          <FollowUsButton>follow us</FollowUsButton>
+          <FaInstagram />
+          <FaFacebook />
+          <span>ms.mwn</span>
+          <span>marwen escobar</span>
+        </SocialMediaContainer>
+        <FooterLinks>
+          <span>Learn more</span>
+          <span>FAQs</span>
+        </FooterLinks>
+      </FooterBottom>
     </>
   );
 };

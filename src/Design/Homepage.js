@@ -312,3 +312,91 @@ export const FooterLinks = styled.div`
     color: white;
   }
 `;
+export const ArtworksSection = styled.section`
+  position: relative; /* Ensure the pseudo-element is positioned correctly */
+  padding: 40px 20px;
+  background-image: url("https://images.twinkl.co.uk/tw1n/image/private/t_630/u/ux/weaving_ver_1.png"); /* Replace with your collage image URL */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  text-align: center;
+  overflow: hidden;
+
+  /* Add a grey overlay using a pseudo-element */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Grey overlay with 50% opacity */
+    z-index: 1; /* Ensure it appears above the background image */
+  }
+
+  /* Ensure the content is above the overlay */
+  > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: white; /* Ensure text is readable over the background */
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7); /* Add shadow for better contrast */
+  }
+`;
+
+export const ArtworksGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+`;
+
+export const ArtworkCard = styled.div`
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  /* Ensure the card adapts to the content size */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const ArtworkImage = styled.img`
+  width: 100%;
+  height: auto; /* Allow the image to maintain its natural aspect ratio */
+  object-fit: contain; /* Ensure the full image is shown within the card */
+  object-position: center; /* Centers the image within the card */
+  background-color: #f9f9f9; /* Adds a light background for images with transparency */
+`;
+export const ArtworkTitle = styled.h3`
+  font-size: 18px;
+  margin: 10px 0;
+  color: #555;
+`;
+export const SeeAllButton = styled.button`
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #007bff; /* Blue button */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+`;
