@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+
 import {
   Container,
   Hero,
@@ -47,6 +49,8 @@ const HomePage = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true); // State to track loading status
   const [tribes, setTribes] = useState([]);
+  const navigate = useNavigate(); // Initialize useNavigate
+
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -80,7 +84,10 @@ const HomePage = () => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
-
+  const handleTribeClick = (tribeName) => {
+    localStorage.setItem("selectedTribe", tribeName); // Store the tribe's name in local storage
+    navigate("/tribes"); // Navigate to the /tribes page
+  };
   return (
     <>
       <Navbar />
@@ -95,25 +102,28 @@ const HomePage = () => {
         {/* Tribes/Artworks Section */}
         
         <ArtworksSection>
-  <h2>Tribes/Artworks</h2>
-  {loading ? (
-    <ClipLoader size={50} color={"#123abc"} loading={loading} /> // Loading spinner
-  ) : (
-    <ArtworksGrid>
-      {tribes.slice(0, 4).map((tribe) => ( // Limit to the first 4 tribes
-        <ArtworkCard key={tribe.id}>
-          <ArtworkImage
-            src={`data:image/jpeg;base64,${tribe.featured_image}`}
-            alt={tribe.name}
-          />
-          <ArtworkTitle>{tribe.name}</ArtworkTitle>
-        </ArtworkCard>
-      ))}
-    </ArtworksGrid>
-  )}
-  <SeeAllButton>See All Tribes</SeeAllButton>
-</ArtworksSection>
-
+          <h2>Tribes/Artworks</h2>
+          {loading ? (
+            <ClipLoader size={50} color={"#123abc"} loading={loading} />
+          ) : (
+            <ArtworksGrid>
+              {tribes.slice(0, 4).map((tribe) => (
+                <ArtworkCard
+                  key={tribe.id}
+                  onClick={() => handleTribeClick(tribe.name)} // Add onClick handler
+                  style={{ cursor: "pointer" }} // Add pointer cursor for clickable effect
+                >
+                  <ArtworkImage
+                    src={`data:image/jpeg;base64,${tribe.featured_image}`}
+                    alt={tribe.name}
+                  />
+                  <ArtworkTitle>{tribe.name}</ArtworkTitle>
+                </ArtworkCard>
+              ))}
+            </ArtworksGrid>
+          )}
+          <SeeAllButton>See All Tribes</SeeAllButton>
+        </ArtworksSection>
         {/* Events Section */}
         <EventsSection>
           <EventsTitle>Events</EventsTitle>

@@ -4,6 +4,7 @@ import HomePage from "./Pages/Homepage";
 import AddEventPage from "./Pages/AddEventPage";
 import EventsTable from "./Pages/EventsTable";
 import AddTribes from "./Pages/AddTribes";
+import TribePage from "./Pages/TribePage";
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
         <Route path="/add-event" element={<AddEventPage />} />
         <Route path="/events" element={<EventsTable />} />
         <Route path="/add-tribes" element={<AddTribes />} />
+        <Route path="/tribes" element={<TribePage />} />
       </Routes>
     </Router>
   );
