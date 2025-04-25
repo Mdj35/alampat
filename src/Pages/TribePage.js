@@ -19,6 +19,18 @@ import {
   ModalTitle,
   ModalText,
   Divider,
+  ModalContent,
+  ModalDetails,
+  ArtistName,
+  ArtistLocation,
+  AboutSection,
+  AboutTitle,
+  AboutDescription,
+  NotForSaleTag,
+  Section,
+  SectionTitle,
+  SectionText,
+  DividerLine,
 } from "../Design/TribePage"; // 👈 import the styles here
 
 const AtaTribesPage = () => {
@@ -142,22 +154,44 @@ const AtaTribesPage = () => {
         <ModalContainer onClick={(e) => e.stopPropagation()}>
           <CloseButton onClick={closeModal}>&times;</CloseButton>
           {selectedArtwork && (
-            <>
+            <ModalContent>
+              {/* Artist Section */}
               <ModalImage
                 src={`data:image/jpeg;base64,${selectedArtwork.artist_picture}`}
                 alt="Artist"
               />
-              <ModalTitle>{selectedArtwork.artist_name}</ModalTitle>
-              <ModalText>
-                <strong>About the Artist:</strong>{" "}
-                {selectedArtwork.artist_description}
-              </ModalText>
-              <Divider />
-              <ModalText>
-                <strong>About the Artwork:</strong>{" "}
-                {selectedArtwork.artwork_description}
-              </ModalText>
-            </>
+              <Section>
+                <SectionTitle>Artist Name:</SectionTitle>
+                <SectionText>{selectedArtwork.artist_name}</SectionText>
+
+                <SectionTitle>Location:</SectionTitle>
+                <SectionText>
+                  {selectedArtwork.artist_location || "Unknown"}
+                </SectionText>
+
+                <SectionTitle>About the Artist:</SectionTitle>
+                <SectionText>{selectedArtwork.artist_description}</SectionText>
+              </Section>
+
+              {/* Divider */}
+              <DividerLine />
+
+              {/* Artwork Section */}
+              <ModalImage
+                src={`data:image/jpeg;base64,${selectedArtwork.artwork_picture}`}
+                alt="Artwork"
+              />
+              <Section>
+                <SectionTitle>Artwork Title:</SectionTitle>
+                <SectionText>{selectedArtwork.artwork_title}</SectionText>
+
+                <SectionTitle>About the Artwork:</SectionTitle>
+                <SectionText>{selectedArtwork.artwork_description}</SectionText>
+              </Section>
+
+              {/* Not For Sale Tag */}
+              <NotForSaleTag>NOT FOR SALE</NotForSaleTag>
+            </ModalContent>
           )}
         </ModalContainer>
       </ModalBackground>

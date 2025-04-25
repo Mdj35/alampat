@@ -102,31 +102,103 @@ export const ModalContainer = styled.div`
   background: white;
   width: 600px;
   max-width: 90%;
-  padding: 20px;
+  height: 90vh; /* Fixed height */
+  padding: 0; /* We'll handle padding inside */
   border-radius: 10px;
   position: relative;
-  text-align: left;
-  overflow-y: auto;
-  max-height: 90vh;
+  overflow: hidden; /* Hide overflow of outer container */
+  display: flex;
+  flex-direction: column;
 `;
-
 export const CloseButton = styled.button`
   position: absolute;
   top: 10px;
   right: 15px;
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 28px;
+  font-weight: bold;
   cursor: pointer;
 `;
 
-export const ModalImage = styled.img`
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
+export const ModalContent = styled.div`
+  flex: 1; /* Take up available space */
+  overflow-y: auto; /* Enable vertical scroll */
+  padding: 20px; /* Inner padding for the content */
+  font-family: "Times New Roman", serif;
 `;
 
+export const ModalImage = styled.img`
+  width: 50%;
+  height: auto;
+  object-fit: cover;
+`;
+export const Section = styled.div`
+  padding: 20px;
+  border-left: 2px solid black;
+  position: relative;
+`;
+
+export const DividerLine = styled.hr`
+  border: none;
+  border-top: 2px solid black;
+  margin: 0;
+`;
+export const ModalDetails = styled.div`
+  padding: 20px;
+  border-left: 2px solid black;
+  position: relative;
+`;
+export const ArtistName = styled.p`
+  font-size: 14px;
+  font-weight: bold;
+  margin: 5px 0;
+  text-transform: uppercase;
+`;
+
+export const ArtistLocation = styled.p`
+  font-size: 13px;
+  margin: 5px 0;
+  color: #333;
+`;
+export const SectionTitle = styled.p`
+  font-size: 14px;
+  font-weight: bold;
+  margin: 10px 0 5px 0;
+  text-transform: uppercase;
+`;
+
+export const SectionText = styled.p`
+  font-size: 13px;
+  line-height: 1.4;
+  margin: 5px 0;
+`;
+export const AboutSection = styled.div`
+  margin-top: 10px;
+`;
+
+export const AboutTitle = styled.p`
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+`;
+
+export const AboutDescription = styled.p`
+  font-size: 13px;
+  line-height: 1.4;
+`;
+
+export const NotForSaleTag = styled.div`
+  background-color: #c7a644;
+  color: black;
+  padding: 5px 10px;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 20px 20px 0 0;
+  width: fit-content;
+  margin: 20px auto 0;
+  text-align: center;
+`;
 export const ModalTitle = styled.h2`
   margin-top: 10px;
   font-size: 20px;
