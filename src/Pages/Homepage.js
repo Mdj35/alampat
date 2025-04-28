@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-
 import {
   Container,
   Hero,
@@ -44,12 +43,14 @@ import logo from "../logo2.png";
 import axios from "axios";
 import { FaInstagram, FaFacebook } from "react-icons/fa";
 import { ClipLoader } from "react-spinners"; // Import the loading spinner
+import { motion } from "framer-motion"; // Import framer-motion for animations
 
 const HomePage = () => {
   const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true); // State to track loading status
+  const [loading, setLoading] = useState(true);
   const [tribes, setTribes] = useState([]);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [showAllTribes, setShowAllTribes] = useState(false); // 👈 new state for showing all tribes
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -59,10 +60,10 @@ const HomePage = () => {
         );
         const data = await response.json();
         setEvents(data);
-        setLoading(false); // Set loading to false after data is fetched
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching events:", error);
-        setLoading(false); // Set loading to false in case of error
+        setLoading(false);
       }
     };
 
@@ -87,6 +88,10 @@ const HomePage = () => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
+  const handleSeeAllClick = () => {
+    setShowAllTribes(true);
+  };
+
   const handleTribeClick = (tribeName) => {
     localStorage.setItem("selectedTribe", tribeName); // Store the tribe's name in local storage
     navigate("/tribes"); // Navigate to the /tribes page
@@ -115,22 +120,34 @@ const HomePage = () => {
             <ClipLoader size={50} color={"#123abc"} loading={loading} />
           ) : (
             <ArtworksGrid>
-              {tribes.slice(0, 4).map((tribe) => (
-                <ArtworkCard
-                  key={tribe.id}
-                  onClick={() => handleTribeClick(tribe.name)} // Add onClick handler
-                  style={{ cursor: "pointer" }} // Add pointer cursor for clickable effect
-                >
-                  <ArtworkImage
-                    src={`data:image/jpeg;base64,${tribe.featured_image}`}
-                    alt={tribe.name}
-                  />
-                  <ArtworkTitle>{tribe.name}</ArtworkTitle>
-                </ArtworkCard>
-              ))}
+              {(showAllTribes ? tribes : tribes.slice(0, 4)).map(
+                (tribe, index) => (
+                  <motion.div
+                    key={tribe.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }} // 👈 nice staggered animation
+                  >
+                    <ArtworkCard
+                      onClick={() => handleTribeClick(tribe.name)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <ArtworkImage
+                        src={`data:image/jpeg;base64,${tribe.featured_image}`}
+                        alt={tribe.name}
+                      />
+                      <ArtworkTitle>{tribe.name}</ArtworkTitle>
+                    </ArtworkCard>
+                  </motion.div>
+                ),
+              )}
             </ArtworksGrid>
           )}
-          <SeeAllButton>See All Tribes</SeeAllButton>
+          {!showAllTribes && (
+            <SeeAllButton onClick={handleSeeAllClick}>
+              See All Tribes
+            </SeeAllButton>
+          )}
         </ArtworksSection>
         {/* Events Section */}
         <EventsSection>
