@@ -37,7 +37,7 @@ import {
   FooterLogoImage,
   FooterBottom,
   FollowUsButton,
-  SeeAllButton
+  SeeAllButton,
 } from "../Design/Homepage";
 import Navbar from "../Navbar";
 import logo from "../logo2.png";
@@ -51,11 +51,12 @@ const HomePage = () => {
   const [tribes, setTribes] = useState([]);
   const navigate = useNavigate(); // Initialize useNavigate
 
-
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch("https://vynceianoani.helioho.st/alampat/events.php");
+        const response = await fetch(
+          "https://vynceianoani.helioho.st/alampat/events.php",
+        );
         const data = await response.json();
         setEvents(data);
         setLoading(false); // Set loading to false after data is fetched
@@ -70,7 +71,9 @@ const HomePage = () => {
   useEffect(() => {
     const fetchTribes = async () => {
       try {
-        const response = await axios.get("https://vynceianoani.helioho.st/alampat/gettribes.php");
+        const response = await axios.get(
+          "https://vynceianoani.helioho.st/alampat/gettribes.php",
+        );
         setTribes(response.data);
       } catch (error) {
         console.error("Error fetching tribes:", error);
@@ -93,14 +96,19 @@ const HomePage = () => {
       <Navbar />
       <Container>
         <Hero>
-          <HeroImage src="https://images.twinkl.co.uk/tw1n/image/private/t_630/u/ux/weaving_ver_1.png" alt="Hero" />
+          <HeroImage
+            src="https://images.twinkl.co.uk/tw1n/image/private/t_630/u/ux/weaving_ver_1.png"
+            alt="Hero"
+          />
           <Description>
-            <strong>ALAMPAT</strong> is created to promote all kinds of arts created by our indigenous people and protect their rights as the owner of their creation.
+            <strong>ALAMPAT</strong> is created to promote all kinds of arts
+            created by our indigenous people and protect their rights as the
+            owner of their creation.
           </Description>
         </Hero>
 
         {/* Tribes/Artworks Section */}
-        
+
         <ArtworksSection>
           <h2>Tribes/Artworks</h2>
           {loading ? (
@@ -128,17 +136,30 @@ const HomePage = () => {
         <EventsSection>
           <EventsTitle>Events</EventsTitle>
           {loading ? (
-            <ClipLoader size={50} color={"#123abc"} loading={loading} /> // Loading spinner
-          ) : (
+            <ClipLoader size={50} color={"#123abc"} loading={loading} />
+          ) : events.length > 0 ? (
             <EventsContainer>
               {events.map((event) => (
                 <EventCard key={event.id}>
                   <EventDate>{formatDate(event.date)}</EventDate>
-                  <EventImage src={`data:image/jpeg;base64,${event.image}`} alt="Event" />
+                  <EventImage
+                    src={`data:image/jpeg;base64,${event.image}`}
+                    alt="Event"
+                  />
                   <EventDescription>{event.description}</EventDescription>
                 </EventCard>
               ))}
             </EventsContainer>
+          ) : (
+            <p
+              style={{
+                textAlign: "center",
+                marginTop: "20px",
+                fontSize: "1.2rem",
+              }}
+            >
+              No upcoming events.
+            </p>
           )}
           <DiscoverMore>Discover More</DiscoverMore>
         </EventsSection>
@@ -150,15 +171,26 @@ const HomePage = () => {
               <FooterLogoImage src={logo} alt="Footer Logo" />
             </FooterLogoContainer>
             <div>
-              <FooterText>ALAMPAT is created to promote all kinds of arts created by our indigenous people and protect their rights as the owner of their creation.</FooterText>
+              <FooterText>
+                ALAMPAT is created to promote all kinds of arts created by our
+                indigenous people and protect their rights as the owner of their
+                creation.
+              </FooterText>
               <CollaborationText>
-                In Collaboration with Holy Cross of Davao College under the office of Culture in the Arts and Institute of Davao Studies
+                In Collaboration with Holy Cross of Davao College under the
+                office of Culture in the Arts and Institute of Davao Studies
               </CollaborationText>
 
               {/* Collaboration Logos */}
               <LogosContainer>
-                <LogoImage src="https://www.hcdc.edu.ph/wp-content/uploads/2018/02/hcdclogo.png" alt="Collaboration Logo 1" />
-                <LogoImage src="https://www.hcdc.edu.ph/wp-content/uploads/2018/02/hcdclogo.png" alt="Collaboration Logo 2" />
+                <LogoImage
+                  src="https://www.hcdc.edu.ph/wp-content/uploads/2018/02/hcdclogo.png"
+                  alt="Collaboration Logo 1"
+                />
+                <LogoImage
+                  src="https://www.hcdc.edu.ph/wp-content/uploads/2018/02/hcdclogo.png"
+                  alt="Collaboration Logo 2"
+                />
               </LogosContainer>
             </div>
           </FooterContainer>

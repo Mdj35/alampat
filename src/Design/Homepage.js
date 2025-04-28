@@ -4,7 +4,7 @@ import { FaBars, FaSearch } from "react-icons/fa";
 export const Container = styled.div`
   font-family: Arial, sans-serif;
   background: #fffaf0;
-  padding-top: 150px; 
+  padding-top: 150px;
 `;
 
 export const Navbar = styled.nav`
@@ -46,11 +46,21 @@ export const Menu = styled.div`
 `;
 
 export const SearchBar = styled.div`
+  position: relative; /* 👈 Needed for SuggestionsList to align */
   display: flex;
   align-items: center;
   background: #ffebcd;
   padding: 5px 15px;
   border-radius: 20px;
+  width: 250px; /* 👈 Fixed width to match SuggestionsList */
+
+  @media (max-width: 768px) {
+    width: 200px;
+  }
+
+  @media (max-width: 480px) {
+    width: 150px;
+  }
 `;
 
 export const Input = styled.input`
@@ -59,6 +69,7 @@ export const Input = styled.input`
   background: transparent;
   font-size: 14px;
   padding: 5px;
+  flex: 1; /* Make input take available space */
 `;
 
 export const SearchIcon = styled(FaSearch)`
@@ -67,7 +78,6 @@ export const SearchIcon = styled(FaSearch)`
   margin-left: 5px;
   cursor: pointer;
 `;
-
 export const MenuIcon = styled(FaBars)`
   font-size: 24px;
   cursor: pointer;
@@ -232,8 +242,6 @@ export const DonateButton = styled.button`
   }
 `;
 
-
-
 export const SocialIcon = styled.img`
   width: 25px;
   height: 25px;
@@ -247,7 +255,6 @@ export const FollowUs = styled.span`
   padding: 5px 10px;
   border: 1px solid gold;
 `;
-
 
 export const FooterLogoContainer = styled.div`
   margin-bottom: 20px;
@@ -290,7 +297,7 @@ export const SocialMediaContainer = styled.div`
 
 // Follow Us Button
 export const FollowUsButton = styled.button`
-  background: #c99924;  // Adjust to match the yellow button in the image
+  background: #c99924; // Adjust to match the yellow button in the image
   color: black;
   border: none;
   padding: 5px 10px;
@@ -398,5 +405,26 @@ export const SeeAllButton = styled.button`
 
   &:hover {
     background-color: #0056b3; /* Darker blue on hover */
+  }
+`;
+export const SuggestionsList = styled.div`
+  position: absolute;
+  top: 110%; /* 👈 a bit lower below SearchBar */
+  left: 0;
+  width: 100%; /* 👈 Match SearchBar width */
+  background: white;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 8px; /* slight rounding for nice look */
+  z-index: 20;
+`;
+
+export const SuggestionItem = styled.div`
+  padding: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  &:hover {
+    background-color: #f2f2f2;
   }
 `;
