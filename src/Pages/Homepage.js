@@ -202,10 +202,6 @@ const HomePage = () => {
               <LogosContainer>
                 <LogoImage
                   src="https://www.hcdc.edu.ph/wp-content/uploads/2018/02/hcdclogo.png"
-                  alt="Collaboration Logo 1"
-                />
-                <LogoImage
-                  src="https://www.hcdc.edu.ph/wp-content/uploads/2018/02/hcdclogo.png"
                   alt="Collaboration Logo 2"
                 />
               </LogosContainer>
@@ -216,11 +212,9 @@ const HomePage = () => {
       <FooterBottom>
         <DonateButton>Donate</DonateButton>
         <SocialMediaContainer>
-          <FollowUsButton>follow us</FollowUsButton>
-          <FaInstagram />
-          <FaFacebook />
-          <span>ms.mwn</span>
-          <span>marwen escobar</span>
+          <FollowUsButton as="a" href="https://www.facebook.com/hcdcofficial">
+            follow us
+          </FollowUsButton>
         </SocialMediaContainer>
         <FooterLinks>
           <span>Learn more</span>

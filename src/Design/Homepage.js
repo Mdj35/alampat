@@ -11,19 +11,20 @@ export const Navbar = styled.nav`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   padding: 15px 50px;
   background: white;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
   position: fixed;
   width: 95%;
-  z-index: 1000; /* Ensure it is above other elements */
+  top: 0;
+  left: 0;
+  z-index: 1000;
 
   @media (max-width: 768px) {
-    padding: 15px 20px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 15px 10px;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 20px;
   }
 `;
 
@@ -31,6 +32,11 @@ export const LeftSection = styled.div`
   display: flex;
   align-items: center;
   gap: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 10px;
+  }
 `;
 
 export const Logo = styled.img`
@@ -43,6 +49,11 @@ export const Menu = styled.div`
   font-size: 16px;
   font-weight: bold;
   align-items: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 10px;
+  }
 `;
 
 export const SearchBar = styled.div`

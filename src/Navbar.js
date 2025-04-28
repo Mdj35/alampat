@@ -14,12 +14,16 @@ import {
 } from "./Design/Homepage";
 import logo from "./web.png";
 import axios from "axios";
+import Modal from "./Modal"; // import the modal you created
 
 const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false); // modal state
   const navigate = useNavigate();
 
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
   const handleInputClick = async () => {
     try {
       const response = await axios.get(
@@ -47,41 +51,47 @@ const Navbar = () => {
   );
 
   return (
-    <StyledNavbar>
-      <LeftSection>
-        <MenuIcon />
-        <Logo src={logo} alt="ALAMPAT" />
-        <Menu>
-          <span>HOME</span>
-          <span>ABOUT US</span>
-        </Menu>
-      </LeftSection>
-      <SearchBar>
-        <Input
-          placeholder="Search Tribes"
-          value={searchTerm}
-          onChange={handleInputChange}
-          onClick={handleInputClick}
-        />
-        <SearchIcon />
-        {searchTerm && (
-          <SuggestionsList>
-            {filteredSuggestions.length > 0 ? (
-              filteredSuggestions.map((tribe) => (
-                <SuggestionItem
-                  key={tribe.id}
-                  onClick={() => handleSuggestionClick(tribe.name)}
-                >
-                  {tribe.name}
-                </SuggestionItem>
-              ))
-            ) : (
-              <SuggestionItem>No tribe found</SuggestionItem>
-            )}
-          </SuggestionsList>
-        )}
-      </SearchBar>
-    </StyledNavbar>
+    <>
+      <StyledNavbar>
+        <LeftSection>
+          <MenuIcon />
+          <Logo src={logo} alt="ALAMPAT" />
+          <Menu>
+            <span>HOME</span>
+            <span onClick={openModal} style={{ cursor: "pointer" }}>
+              ABOUT US
+            </span>
+          </Menu>
+        </LeftSection>
+        <SearchBar>
+          <Input
+            placeholder="Search Tribes"
+            value={searchTerm}
+            onChange={handleInputChange}
+            onClick={handleInputClick}
+          />
+          <SearchIcon />
+          {searchTerm && (
+            <SuggestionsList>
+              {filteredSuggestions.length > 0 ? (
+                filteredSuggestions.map((tribe) => (
+                  <SuggestionItem
+                    key={tribe.id}
+                    onClick={() => handleSuggestionClick(tribe.name)}
+                  >
+                    {tribe.name}
+                  </SuggestionItem>
+                ))
+              ) : (
+                <SuggestionItem>No tribe found</SuggestionItem>
+              )}
+            </SuggestionsList>
+          )}
+        </SearchBar>
+      </StyledNavbar>
+
+      {isModalOpen && <Modal onClose={closeModal} />}
+    </>
   );
 };
 
