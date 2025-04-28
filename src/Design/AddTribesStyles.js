@@ -133,3 +133,17 @@ export const TribeImage = styled.img`
   object-fit: cover;
   border-radius: 6px;
 `;
+export const EditButton = styled.button`
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #2980b9;
+  }
+`;

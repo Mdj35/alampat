@@ -12,26 +12,13 @@ import {
   Artwork,
   ArtworkCard,
   ArtworkTitleText,
-  ModalBackground,
-  ModalContainer,
-  CloseButton,
-  ModalImage,
-  ModalTitle,
-  ModalText,
-  Divider,
+  ModalOverlay,
   ModalContent,
-  ModalDetails,
-  ArtistName,
-  ArtistLocation,
-  AboutSection,
-  AboutTitle,
-  AboutDescription,
-  NotForSaleTag,
-  Section,
-  SectionTitle,
-  SectionText,
-  DividerLine,
-} from "../Design/TribePage"; // 👈 import the styles here
+  ModalImage,
+  ModalDescription,
+  ModalNavigationButton,
+  ModalPageIndicator,
+} from "../Design/TribePage"; // 👈 make sure these new styles are created
 
 const AtaTribesPage = () => {
   const [tribeName, setTribeName] = useState("");
@@ -39,7 +26,7 @@ const AtaTribesPage = () => {
   const [description, setDescription] = useState("");
   const [artworks, setArtworks] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedArtwork, setSelectedArtwork] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const storedTribeName = localStorage.getItem("selectedTribe");
@@ -84,36 +71,25 @@ const AtaTribesPage = () => {
     }
   }, []);
 
-  const handleArtworkClick = (artwork) => {
-    axios
-      .post("https://vynceianoani.helioho.st/alampat/getArtworkDetails.php", {
-        id: artwork.id,
-      })
-      .then((response) => {
-        if (response.data && !response.data.error) {
-          setSelectedArtwork({
-            artist_name: response.data.artist_name,
-            artist_picture: response.data.artist_picture,
-            artist_description: response.data.artist_description,
-            artwork_title: response.data.artwork_title,
-            artwork_picture: response.data.artwork_picture,
-            artwork_description: response.data.artwork_description,
-          });
-          setIsModalOpen(true);
-        } else {
-          console.error(
-            response.data.error || "Failed to load artwork details.",
-          );
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching artwork details:", error);
-      });
+  const openModal = (index) => {
+    setCurrentIndex(index);
+    setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setSelectedArtwork(null);
+  };
+
+  const nextArtwork = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === artworks.length - 1 ? 0 : prevIndex + 1,
+    );
+  };
+
+  const prevArtwork = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? artworks.length - 1 : prevIndex - 1,
+    );
   };
 
   return (
@@ -130,11 +106,8 @@ const AtaTribesPage = () => {
           <ArtworkTitle>{tribeName} ARTWORKS</ArtworkTitle>
           <Artworks>
             {artworks.length > 0 ? (
-              artworks.map((artwork) => (
-                <ArtworkCard
-                  key={artwork.id}
-                  onClick={() => handleArtworkClick(artwork)}
-                >
+              artworks.map((artwork, index) => (
+                <ArtworkCard key={artwork.id} onClick={() => openModal(index)}>
                   <Artwork
                     src={`data:image/jpeg;base64,${artwork.picture}`}
                     alt={artwork.title}
@@ -149,52 +122,32 @@ const AtaTribesPage = () => {
         </ArtworkSection>
       </Container>
 
-      {/* Modal */}
-      <ModalBackground isOpen={isModalOpen} onClick={closeModal}>
-        <ModalContainer onClick={(e) => e.stopPropagation()}>
-          <CloseButton onClick={closeModal}>&times;</CloseButton>
-          {selectedArtwork && (
-            <ModalContent>
-              {/* Artist Section */}
-              <ModalImage
-                src={`data:image/jpeg;base64,${selectedArtwork.artist_picture}`}
-                alt="Artist"
-              />
-              <Section>
-                <SectionTitle>Artist Name:</SectionTitle>
-                <SectionText>{selectedArtwork.artist_name}</SectionText>
+      {isModalOpen && (
+        <ModalOverlay onClick={closeModal}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <ModalImage
+              src={`data:image/jpeg;base64,${artworks[currentIndex].picture}`}
+              alt={artworks[currentIndex].title}
+            />
+            <ModalDescription>
+              {artworks[currentIndex].description ||
+                artworks[currentIndex].title}
+            </ModalDescription>
 
-                <SectionTitle>Location:</SectionTitle>
-                <SectionText>
-                  {selectedArtwork.artist_location || "Unknown"}
-                </SectionText>
+            {/* 👇 New page indicator */}
+            <ModalPageIndicator>
+              {currentIndex + 1} of {artworks.length}
+            </ModalPageIndicator>
 
-                <SectionTitle>About the Artist:</SectionTitle>
-                <SectionText>{selectedArtwork.artist_description}</SectionText>
-              </Section>
-
-              {/* Divider */}
-              <DividerLine />
-
-              {/* Artwork Section */}
-              <ModalImage
-                src={`data:image/jpeg;base64,${selectedArtwork.artwork_picture}`}
-                alt="Artwork"
-              />
-              <Section>
-                <SectionTitle>Artwork Title:</SectionTitle>
-                <SectionText>{selectedArtwork.artwork_title}</SectionText>
-
-                <SectionTitle>About the Artwork:</SectionTitle>
-                <SectionText>{selectedArtwork.artwork_description}</SectionText>
-              </Section>
-
-              {/* Not For Sale Tag */}
-              <NotForSaleTag>NOT FOR SALE</NotForSaleTag>
-            </ModalContent>
-          )}
-        </ModalContainer>
-      </ModalBackground>
+            <ModalNavigationButton onClick={prevArtwork}>
+              ‹
+            </ModalNavigationButton>
+            <ModalNavigationButton onClick={nextArtwork}>
+              ›
+            </ModalNavigationButton>
+          </ModalContent>
+        </ModalOverlay>
+      )}
     </>
   );
 };

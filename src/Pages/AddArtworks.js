@@ -5,9 +5,6 @@ import axios from "axios";
 const AddArtworks = () => {
   const [tribes, setTribes] = useState([]);
   const [formData, setFormData] = useState({
-    artistName: "",
-    artistPicture: null,
-    artistDescription: "",
     artworkTitle: "",
     artworkPicture: null,
     artworkDescription: "",
@@ -39,23 +36,21 @@ const AddArtworks = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData();
-    data.append("artistName", formData.artistName);
-    data.append("artistPicture", formData.artistPicture);
-    data.append("artistDescription", formData.artistDescription);
     data.append("artworkTitle", formData.artworkTitle);
     data.append("artworkPicture", formData.artworkPicture);
     data.append("artworkDescription", formData.artworkDescription);
     data.append("tribeId", formData.tribeId);
 
     try {
-      const response = await axios.post("https://vynceianoani.helioho.st/alampat/addArtworks.php", data, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await axios.post(
+        "https://vynceianoani.helioho.st/alampat/addArtworks.php",
+        data,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        },
+      );
       alert(response.data.message);
       setFormData({
-        artistName: "",
-        artistPicture: null,
-        artistDescription: "",
         artworkTitle: "",
         artworkPicture: null,
         artworkDescription: "",
@@ -71,35 +66,6 @@ const AddArtworks = () => {
     <FormContainer>
       <h1>Add Artwork</h1>
       <Form onSubmit={handleSubmit}>
-        <Label>
-          Artist Name:
-          <Input
-            type="text"
-            name="artistName"
-            value={formData.artistName}
-            onChange={handleChange}
-            required
-          />
-        </Label>
-        <Label>
-          Artist Picture:
-          <Input
-            type="file"
-            name="artistPicture"
-            accept="image/*"
-            onChange={handleFileChange}
-            required
-          />
-        </Label>
-        <Label>
-          Artist Description:
-          <Textarea
-            name="artistDescription"
-            value={formData.artistDescription}
-            onChange={handleChange}
-            required
-          />
-        </Label>
         <Label>
           Artwork Title:
           <Input

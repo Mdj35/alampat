@@ -121,18 +121,6 @@ export const CloseButton = styled.button`
   cursor: pointer;
 `;
 
-export const ModalContent = styled.div`
-  flex: 1; /* Take up available space */
-  overflow-y: auto; /* Enable vertical scroll */
-  padding: 20px; /* Inner padding for the content */
-  font-family: "Times New Roman", serif;
-`;
-
-export const ModalImage = styled.img`
-  width: 50%;
-  height: auto;
-  object-fit: cover;
-`;
 export const Section = styled.div`
   padding: 20px;
   border-left: 2px solid black;
@@ -211,4 +199,65 @@ export const ModalText = styled.p`
 
 export const Divider = styled.hr`
   margin: 20px 0;
+`;
+export const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const ModalContent = styled.div`
+  position: relative;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%; /* 👈 make modal wider */
+  max-width: 1200px;
+  max-height: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const ModalImage = styled.img`
+  max-width: 100%;
+  max-height: 65vh; /* 👈 adjusted height to fit larger width */
+  border-radius: 8px;
+`;
+
+export const ModalDescription = styled.p`
+  margin-top: 15px;
+  font-size: 1.2rem;
+  text-align: center;
+`;
+
+export const ModalPageIndicator = styled.p`
+  margin-top: 10px;
+  font-size: 1rem;
+  color: #666;
+`;
+
+export const ModalNavigationButton = styled.button`
+  position: absolute;
+  top: 50%;
+  font-size: 3rem;
+  background: none;
+  border: none;
+  color: black;
+  cursor: pointer;
+  transform: translateY(-50%);
+  padding: 10px;
+  &:first-of-type {
+    left: -60px;
+  }
+  &:last-of-type {
+    right: -60px;
+  }
 `;
