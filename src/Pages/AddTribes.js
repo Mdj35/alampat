@@ -1,6 +1,25 @@
-import React, { useState } from "react";
-import styled from "styled-components";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import {
+  ModalOverlay,
+  Modal,
+  PasswordForm,
+  PasswordInput,
+  FormContainer,
+  Form,
+  Label,
+  Input,
+  Textarea,
+  SubmitButton,
+  TableContainer,
+  StyledTable,
+  TableHead,
+  TableRow,
+  TableHeader,
+  TableBody,
+  TableData,
+  TribeImage,
+} from "../Design/AddTribesStyles";
 
 const AddTribes = () => {
   const [formData, setFormData] = useState({
@@ -9,14 +28,16 @@ const AddTribes = () => {
     description: "",
   });
 
+  const [tribes, setTribes] = useState([]); // <-- ALWAYS start as an empty array
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
-    const correctPassword = "admin123"; // Replace with your desired password
+    const correctPassword = "admin123";
     if (password === correctPassword) {
       setIsAuthenticated(true);
+      fetchTribes(); // fetch tribes once authenticated
     } else {
       alert("Incorrect password. Access denied.");
     }
@@ -39,26 +60,37 @@ const AddTribes = () => {
     data.append("description", formData.description);
 
     try {
-      const response = await axios.post("https://vynceianoani.helioho.st/alampat/addtribes.php", data, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await axios.post(
+        "https://vynceianoani.helioho.st/alampat/addtribes.php",
+        data,
+        { headers: { "Content-Type": "multipart/form-data" } },
+      );
       alert(response.data.message);
 
-      // Clear the form inputs after successful addition
-      setFormData({
-        name: "",
-        featuredImage: null,
-        description: "",
-      });
+      setFormData({ name: "", featuredImage: null, description: "" });
+      fetchTribes(); // Refresh the tribe list after adding
     } catch (error) {
       console.error("Error adding tribe:", error);
       alert("Failed to add tribe.");
     }
   };
 
+  const fetchTribes = async () => {
+    try {
+      const response = await axios.get(
+        "https://vynceianoani.helioho.st/alampat/gettribes.php",
+      );
+      const fetchedTribes = response.data?.tribes || [];
+      setTribes(fetchedTribes);
+    } catch (error) {
+      console.error("Error fetching tribes:", error);
+      setTribes([]); // set to empty array if fetching fails
+    }
+  };
+
   return (
     <>
-      {!isAuthenticated && (
+      {!isAuthenticated ? (
         <ModalOverlay>
           <Modal>
             <h1>Enter Password</h1>
@@ -74,136 +106,75 @@ const AddTribes = () => {
             </PasswordForm>
           </Modal>
         </ModalOverlay>
-      )}
+      ) : (
+        <>
+          <FormContainer>
+            <h1>Add Tribe</h1>
+            <Form onSubmit={handleSubmit}>
+              <Label>
+                Tribe Name:
+                <Input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+              </Label>
+              <Label>
+                Featured Image:
+                <Input
+                  type="file"
+                  name="featuredImage"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  required
+                />
+              </Label>
+              <Label>
+                Short Description:
+                <Textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  required
+                />
+              </Label>
+              <SubmitButton type="submit">Add Tribe</SubmitButton>
+            </Form>
+          </FormContainer>
 
-      {isAuthenticated && (
-        <FormContainer>
-          <h1>Add Tribe</h1>
-          <Form onSubmit={handleSubmit}>
-            <Label>
-              Tribe Name:
-              <Input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-              />
-            </Label>
-            <Label>
-              Featured Image:
-              <Input
-                type="file"
-                name="featuredImage"
-                accept="image/*"
-                onChange={handleFileChange}
-                required
-              />
-            </Label>
-            <Label>
-              Short Description:
-              <Textarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                required
-              />
-            </Label>
-            <SubmitButton type="submit">Add Tribe</SubmitButton>
-          </Form>
-        </FormContainer>
+          {/* --- TRIBES TABLE --- */}
+          <TableContainer>
+            <h2>Existing Tribes</h2>
+            <StyledTable>
+              <TableHead>
+                <TableRow>
+                  <TableHeader>Image</TableHeader>
+                  <TableHeader>Name</TableHeader>
+                  <TableHeader>Description</TableHeader>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {tribes.map((tribe, index) => (
+                  <TableRow key={index}>
+                    <TableData>
+                      <TribeImage
+                        src={`data:image/jpeg;base64,${tribe.featured_image}`}
+                        alt={tribe.name}
+                      />
+                    </TableData>
+                    <TableData>{tribe.name}</TableData>
+                    <TableData>{tribe.description}</TableData>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </StyledTable>
+          </TableContainer>
+        </>
       )}
     </>
   );
 };
 
 export default AddTribes;
-
-// Styled Components
-const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-`;
-
-const Modal = styled.div`
-  background: white;
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  width: 400px;
-`;
-
-const PasswordForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-`;
-
-const PasswordInput = styled.input`
-  width: 100%;
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-`;
-
-const FormContainer = styled.div`
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: center;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-`;
-
-const Label = styled.label`
-  font-size: 16px;
-  text-align: left;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-`;
-
-const Textarea = styled.textarea`
-  width: 100%;
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  resize: none;
-`;
-
-const SubmitButton = styled.button`
-  padding: 10px 20px;
-  font-size: 16px;
-  color: white;
-  background-color: #007bff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
