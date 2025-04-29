@@ -54,7 +54,6 @@ const Navbar = () => {
     <>
       <StyledNavbar>
         <LeftSection>
-          <MenuIcon />
           <Logo src={logo} alt="ALAMPAT" />
           <Menu>
             <span>HOME</span>
