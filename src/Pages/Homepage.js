@@ -178,7 +178,9 @@ const HomePage = () => {
               No upcoming events.
             </p>
           )}
-          <DiscoverMore>Discover More</DiscoverMore>
+          <DiscoverMore as="a" href="https://www.facebook.com/hcdcofficial">
+            Discover More
+          </DiscoverMore>
         </EventsSection>
 
         {/* Footer Section */}
