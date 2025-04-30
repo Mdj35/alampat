@@ -37,6 +37,10 @@ import {
   FooterBottom,
   FollowUsButton,
   SeeAllButton,
+  ModalOverlay,
+  ModalContainer,
+  ModalMessage,
+  CloseButton,
 } from "../Design/Homepage";
 import Navbar from "../Navbar";
 import logo from "../logo2.png";
@@ -49,6 +53,7 @@ const HomePage = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [tribes, setTribes] = useState([]);
+  const [showDonateModal, setShowDonateModal] = useState(false);
   const [showAllTribes, setShowAllTribes] = useState(false); // 👈 new state for showing all tribes
   const navigate = useNavigate();
 
@@ -212,7 +217,9 @@ const HomePage = () => {
         </FooterSection>
       </Container>
       <FooterBottom>
-        <DonateButton>Donate</DonateButton>
+        <DonateButton onClick={() => setShowDonateModal(true)}>
+          Donate
+        </DonateButton>
         <SocialMediaContainer>
           <FollowUsButton as="a" href="https://www.facebook.com/hcdcofficial">
             follow us
@@ -223,6 +230,16 @@ const HomePage = () => {
           <span>FAQs</span>
         </FooterLinks>
       </FooterBottom>
+      {showDonateModal && (
+        <ModalOverlay>
+          <ModalContainer>
+            <ModalMessage>to be followed</ModalMessage>
+            <CloseButton onClick={() => setShowDonateModal(false)}>
+              Close
+            </CloseButton>
+          </ModalContainer>
+        </ModalOverlay>
+      )}
     </>
   );
 };

@@ -408,14 +408,15 @@ export const SeeAllButton = styled.button`
   font-size: 16px;
   font-weight: bold;
   color: white;
-  background-color: #007bff; /* Blue button */
+  background-color: black; /* Blue button */
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: white; /* Darker blue on hover */
+    color: black;
   }
 `;
 export const SuggestionsList = styled.div`
@@ -437,5 +438,46 @@ export const SuggestionItem = styled.div`
   font-size: 14px;
   &:hover {
     background-color: #f2f2f2;
+  }
+`;
+export const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+export const ModalContainer = styled.div`
+  background: white;
+  padding: 2rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  max-width: 400px;
+`;
+
+export const ModalMessage = styled.p`
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+`;
+
+export const CloseButton = styled.button`
+  background: black;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+
+  &:hover {
+    background: white;
+    color: black;
   }
 `;
