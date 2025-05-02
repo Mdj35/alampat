@@ -49,7 +49,29 @@ export const Menu = styled.div`
   font-size: 16px;
   font-weight: bold;
   align-items: center;
+  span {
+  position: relative;
+  cursor: pointer;
+  transition: color 0.3s ease;
 
+  &:hover {
+    color: #b22222;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background-color: #ffebcd;
+    transition: width 0.3s ease;
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
   @media (max-width: 768px) {
     flex-direction: column;
     gap: 10px;

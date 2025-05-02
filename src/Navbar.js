@@ -56,7 +56,12 @@ const Navbar = () => {
         <LeftSection>
           <Logo src={logo} alt="ALAMPAT" />
           <Menu>
-            <span>HOME</span>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            >
+              HOME
+            </span>
             <span onClick={openModal} style={{ cursor: "pointer" }}>
               ABOUT US
             </span>
